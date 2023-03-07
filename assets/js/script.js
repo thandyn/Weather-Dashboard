@@ -1,44 +1,51 @@
 var lon = "";
 var lat = "";
+var weatherDay = "";
+var forecastDay = "";
 // forloop
 function renderForecastEl() {
-  // for (var i = 0; i < city.length; i++) {
-  // }
-  var forecastEl = document.createElement("div");
-  forecastEl.className = "card-body m-2 text-center";
-  weatherEl.innerHTML = `
-                <h5>date</h5>
-                <img src="#" alt="weather-icon">
-                <p>temp</p>
-                <p>wind</p>
-                <p>humidity</p>`;
-  document.getElementById("forecast").appendChild(forecastEl);
+  for (var i = 0; i < forecastDay.length; i + 7) {
+    var date = data[i].dt_text;
+    // var img = data[i]weather.icon
+    var temp = data[i].main.temp;
+    var wind = data[i].wind.speed;
+    var humidity = data.main.humidity[i];
+    var forecastEl = document.createElement("div");
+    forecastEl.className = "card-body m-2 text-center";
+    forecastEl.innerHTML = `
+    <h5>date</h5>
+    <img src="#" alt="weather-icon">
+    <p>temp</p>
+    <p>wind</p>
+    <p>humidity</p>`;
+    document.getElementById("forecast").appendChild(forecastEl);
+  }
 }
 
 function renderWeatherEl() {
-  // for (var i = 0; i < city.length; i++) {
-  // }
-  var city = "";
-  var img = "";
-  var temp = "";
-  var wind = "";
-  var humidity = "";
+  for (var i = 0; i < weatherDay.length; i++) {
+    var city = data[i].name;
+    var img = data[i].weather.icon;
+    var temp = data[i].main.temp;
+    var wind = data[i].wind.speed;
+    var humidity = data.main.humidity[i];
 
-  var weatherEl = document.createElement("div");
-  weatherEl.className = "weathertoday";
-  weatherEl.innerHTML = `
-            <div class="card-body text-center">
-              <h2>City</h2>
-              <img src="#" alt="weather-icon">
-              <p>temp</p>
-              <p>wind</p>
-              <p>humidity</p>
-            </div>`;
-  document.getElementById("today").appendChild(weatherEl);
+    var weatherEl = document.createElement("div");
+    weatherEl.className = "weathertoday";
+    weatherEl.innerHTML = `
+    <div class="card-body text-center">
+    <h2>${city}</h2>
+    <img src="${img}" alt="weather-icon">
+    <p>Temp:${temp}</p>
+    <p>Wind:${wind}</p>
+    <p>Humidity:${humidity}</p>
+    </div>`;
+    document.getElementById("today").appendChild(weatherEl);
+  }
 }
 
 function fetchWeather() {
-  var weatherUrl = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=33c71d61d3a49f346c192acaf4618f76`;
+  var weatherUrl = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=33c71d61d3a49f346c192acaf4618f76&units=imperial`;
 
   fetch(weatherUrl)
     .then(function (res) {
@@ -46,8 +53,8 @@ function fetchWeather() {
     })
     .then(function (data) {
       console.log(data);
-      var days = data.list;
-      console.log(days);
+      var weatherDay = data.list;
+      // console.log(weatherDay);
       renderWeatherEl();
       // add dom weather function
     })
@@ -57,7 +64,7 @@ function fetchWeather() {
 }
 
 function fetchForecast() {
-  var forecastUrl = `http://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=33c71d61d3a49f346c192acaf4618f76`;
+  var forecastUrl = `http://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=33c71d61d3a49f346c192acaf4618f76&units=imperial`;
 
   fetch(forecastUrl)
     .then(function (res) {
@@ -65,8 +72,8 @@ function fetchForecast() {
     })
     .then(function (data) {
       console.log(data);
-      var days = data.list;
-      console.log(days);
+      var forecastDay = data.list;
+      console.log(forecastDay);
       renderForecastEl();
       // add dom forecast function
     })
