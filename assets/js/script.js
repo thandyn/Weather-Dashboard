@@ -10,20 +10,22 @@
 //   renderSearchHistory();
 
 document.getElementById("searchBtn").addEventListener("click", function (e) {
-  var cityInput = document.getElementById("city-input").value;
   e.preventDefault();
-  if (!cityInput.value) {
+  var cityInput = document.getElementById("city-input").value.trim();
+  if (!cityInput) {
     return;
   }
-
-  var city = cityInput.value.trim();
   var limit = 5;
-  var requestUrl = `http://api.openweathermap.org/geo/1.0/direct?q=${city}&limit=${limit}&appid=33c71d61d3a49f346c192acaf4618f76`;
+  var requestUrl = `http://api.openweathermap.org/geo/1.0/direct?q=${cityInput}&limit=${limit}&appid=33c71d61d3a49f346c192acaf4618f76`;
 
-  fetch(requestUrl).then(function (res) {
-    return res.json();
-  });
-  then(function (data) {
-    console.log(data);
-  });
+  fetch(requestUrl)
+    .then(function (res) {
+      return res.json();
+    })
+    .then(function (data) {
+      console.log(data);
+    })
+    .catch(function (err) {
+      console.log(err);
+    });
 });
