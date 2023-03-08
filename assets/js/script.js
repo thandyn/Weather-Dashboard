@@ -1,5 +1,6 @@
 var lon = "";
 var lat = "";
+var historyStorage = JSON.parse(window.localStorage.getItem("city")) || [];
 
 function renderWeatherEl(weatherDay) {
   document.getElementById("today").innerHTML = "";
@@ -75,7 +76,12 @@ function fetchForecast() {
       console.log(err);
     });
 }
-
+document.querySelector("body").addEventListener("click", function (e) {
+  e.preventDefault();
+  if (e.target && e.target.matches(".history")) {
+    console.log(e.target);
+  }
+});
 document.getElementById("searchBtn").addEventListener("click", function (e) {
   e.preventDefault();
   document.getElementById("city-input").innerText = "";
@@ -102,4 +108,36 @@ document.getElementById("searchBtn").addEventListener("click", function (e) {
   var historyBtn = document.createElement("div");
   historyBtn.innerHTML = `<button class="history btn btn-secondary">${cityInput}</button>`;
   document.getElementById("break").append(historyBtn);
+  console.log(historyStorage);
+
+  if (!historyStorage.includes(cityInput)) {
+    historyStorage.push(cityInput);
+  }
+  localStorage.setItem("city", JSON.stringify(historyStorage));
+  document.getElementById("history").addEventListener("click", function (e) {
+    console.log("historyBtn");
+  });
 });
+
+function displayRecentCity(array) {
+  var historyContainer = document.getElementById("recentcity");
+  for (let index = 0; index < array.length; index++) {
+    const element = array[index];
+    var item = document.createElement("button");
+    item.classList.add("list-group-item", "list-group-item-action", "history");
+    item.textContent = array[index];
+    historyContainer.append(item);
+  }
+}
+displayRecentCity(historyStorage);
+{
+  /* <div class="list-group">
+  <button type="button" class="list-group-item list-group-item-action active" aria-current="true">
+    The current button
+  </button>
+  <button type="button" class="list-group-item list-group-item-action">A second button item</button>
+  <button type="button" class="list-group-item list-group-item-action">A third button item</button>
+  <button type="button" class="list-group-item list-group-item-action">A fourth button item</button>
+  <button type="button" class="list-group-item list-group-item-action" disabled>A disabled button item</button>
+</div> */
+}
