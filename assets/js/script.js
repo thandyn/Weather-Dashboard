@@ -1,46 +1,46 @@
 var lon = "";
 var lat = "";
-var weatherDay = "";
-var forecastDay = "";
-// forloop
-function renderForecastEl() {
-  for (var i = 0; i < forecastDay.length; i + 7) {
-    var date = data[i].dt_text;
-    // var img = data[i]weather.icon
-    var temp = data[i].main.temp;
-    var wind = data[i].wind.speed;
-    var humidity = data.main.humidity[i];
-    var forecastEl = document.createElement("div");
-    forecastEl.className = "card-body m-2 text-center";
-    forecastEl.innerHTML = `
-    <h5>date</h5>
-    <img src="#" alt="weather-icon">
-    <p>temp</p>
-    <p>wind</p>
-    <p>humidity</p>`;
-    document.getElementById("forecast").appendChild(forecastEl);
-  }
-}
 
-function renderWeatherEl() {
-  for (var i = 0; i < weatherDay.length; i++) {
-    var city = data[i].name;
-    var img = data[i].weather.icon;
-    var temp = data[i].main.temp;
-    var wind = data[i].wind.speed;
-    var humidity = data.main.humidity[i];
+function renderWeatherEl(weatherDay) {
+  document.getElementById("today").innerHTML = "";
+  console.log(weatherDay);
+  var city = weatherDay.name;
+  var img = weatherDay.weather[0].icon;
+  var temp = weatherDay.main.temp;
+  var wind = weatherDay.wind.speed;
+  var humidity = weatherDay.main.humidity;
 
-    var weatherEl = document.createElement("div");
-    weatherEl.className = "weathertoday";
-    weatherEl.innerHTML = `
+  var weatherEl = document.createElement("div");
+  weatherEl.className = "weathertoday";
+  weatherEl.innerHTML = `
     <div class="card-body text-center">
     <h2>${city}</h2>
-    <img src="${img}" alt="weather-icon">
+    <img src="https://openweathermap.org/img/wn/${img}@2x.png" alt="weather-icon">
     <p>Temp:${temp}</p>
     <p>Wind:${wind}</p>
     <p>Humidity:${humidity}</p>
     </div>`;
-    document.getElementById("today").appendChild(weatherEl);
+  document.getElementById("today").appendChild(weatherEl);
+}
+
+function renderForecastEl(forecastDay) {
+  document.getElementById("forecast").innerHTML = "";
+  console.log(forecastDay);
+  for (var i = 0; i < forecastDay.length; i += 8) {
+    var date = forecastDay[i].dt_txt;
+    var img = forecastDay[i].weather[0].icon;
+    var temp = forecastDay[i].main.temp;
+    var wind = forecastDay[i].wind.speed;
+    var humidity = forecastDay[i].main.humidity;
+    var forecastEl = document.createElement("div");
+    forecastEl.className = "card-body m-2 text-center";
+    forecastEl.innerHTML = `
+      <h5>${date}</h5>
+      <img src="https://openweathermap.org/img/wn/${img}@2x.png" alt="weather-icon">
+      <p>Temp:${temp}</p>
+      <p>Wind:${wind}</p>
+      <p>Humidity:${humidity}</p>`;
+    document.getElementById("forecast").appendChild(forecastEl);
   }
 }
 
@@ -53,10 +53,9 @@ function fetchWeather() {
     })
     .then(function (data) {
       console.log(data);
-      var weatherDay = data.list;
-      // console.log(weatherDay);
-      renderWeatherEl();
-      // add dom weather function
+      var weatherDay = data;
+      console.log(weatherDay);
+      renderWeatherEl(weatherDay);
     })
     .catch(function (err) {
       console.log(err);
@@ -74,8 +73,7 @@ function fetchForecast() {
       console.log(data);
       var forecastDay = data.list;
       console.log(forecastDay);
-      renderForecastEl();
-      // add dom forecast function
+      renderForecastEl(forecastDay);
     })
     .catch(function (err) {
       console.log(err);
@@ -88,18 +86,15 @@ document.getElementById("searchBtn").addEventListener("click", function (e) {
   if (!cityInput) {
     return;
   }
-  var limit = 1;
-  var locationUrl = `http://api.openweathermap.org/geo/1.0/direct?q=${cityInput}&limit=${limit}&appid=33c71d61d3a49f346c192acaf4618f76`;
+  var locationUrl = `http://api.openweathermap.org/geo/1.0/direct?q=${cityInput}&appid=33c71d61d3a49f346c192acaf4618f76`;
 
   fetch(locationUrl)
     .then(function (res) {
       return res.json();
     })
     .then(function (data) {
-      // console.log(data);
       lon = data[0].lon;
       lat = data[0].lat;
-      // console.log(lon, lat);
       fetchForecast();
       fetchWeather();
     })
