@@ -60,7 +60,7 @@ function fetchWeather() {
 }
 
 function fetchForecast() {
-  var forecastUrl = `http://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=33c71d61d3a49f346c192acaf4618f76&units=imperial`;
+  var forecastUrl = `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=33c71d61d3a49f346c192acaf4618f76&units=imperial`;
 
   fetch(forecastUrl)
     .then(function (res) {
@@ -83,7 +83,7 @@ document.getElementById("searchBtn").addEventListener("click", function (e) {
   if (!cityInput) {
     return;
   }
-  var locationUrl = `http://api.openweathermap.org/geo/1.0/direct?q=${cityInput}&appid=33c71d61d3a49f346c192acaf4618f76`;
+  var locationUrl = `https://api.openweathermap.org/geo/1.0/direct?q=${cityInput}&appid=33c71d61d3a49f346c192acaf4618f76`;
 
   fetch(locationUrl)
     .then(function (res) {
