@@ -13,3 +13,5 @@ These two function are almost identical. One fetches the weather for the today a
 ![alt text](/assets/images/ss3.PNG)
 
 Just like the last two functions, these two are almost the same with forecast having a for loop. I started with making sure the added HTML gets emptied when the search is clicked. I grabbed each object from the API and made them into variables and created new elements to add into the HTML by using template literals then appended to the parent of the element as the child.
+
+https://thandyn.github.io/Weather-dashboard/
