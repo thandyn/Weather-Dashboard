@@ -3,7 +3,6 @@ var lat = "";
 
 function renderWeatherEl(weatherDay) {
   document.getElementById("today").innerHTML = "";
-  console.log(weatherDay);
   var city = weatherDay.name;
   var img = weatherDay.weather[0].icon;
   var temp = weatherDay.main.temp;
@@ -25,7 +24,6 @@ function renderWeatherEl(weatherDay) {
 
 function renderForecastEl(forecastDay) {
   document.getElementById("forecast").innerHTML = "";
-  console.log(forecastDay);
   for (var i = 0; i < forecastDay.length; i += 8) {
     var date = forecastDay[i].dt_txt;
     var img = forecastDay[i].weather[0].icon;
@@ -52,7 +50,6 @@ function fetchWeather() {
       return res.json();
     })
     .then(function (data) {
-      console.log(data);
       var weatherDay = data;
       console.log(weatherDay);
       renderWeatherEl(weatherDay);
@@ -70,7 +67,6 @@ function fetchForecast() {
       return res.json();
     })
     .then(function (data) {
-      console.log(data);
       var forecastDay = data.list;
       console.log(forecastDay);
       renderForecastEl(forecastDay);
@@ -82,6 +78,7 @@ function fetchForecast() {
 
 document.getElementById("searchBtn").addEventListener("click", function (e) {
   e.preventDefault();
+  document.getElementById("city-input").innerText = "";
   var cityInput = document.getElementById("city-input").value.trim();
   if (!cityInput) {
     return;
@@ -102,4 +99,7 @@ document.getElementById("searchBtn").addEventListener("click", function (e) {
       console.log(err);
     });
   // history for loop
+  var historyBtn = document.createElement("div");
+  historyBtn.innerHTML = `<button class="history btn btn-secondary">${cityInput}</button>`;
+  document.getElementById("break").append(historyBtn);
 });

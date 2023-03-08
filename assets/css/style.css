@@ -3,9 +3,6 @@
   padding: 0;
 }
 
-:root {
-}
-
 body {
   font-family: sans-serif;
 }
@@ -42,4 +39,8 @@ input {
 
 .btn {
   width: 100%;
+}
+
+.history {
+  margin-bottom: 3px;
 }
